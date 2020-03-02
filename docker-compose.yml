@@ -6,9 +6,9 @@ networks:
 services:
   apache:
     image: "bitnami/apache:latest"
-    #  ports:
-    #    - "80:80"
-    #    - "443:8443"
+    #ports:
+    #  - "80:5000"
+    #  - "443:8443"
     container_name: apache
     networks:
       - app-tier

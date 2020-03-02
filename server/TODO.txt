@@ -1,8 +1,12 @@
-
-https://reactjs.org/docs/thinking-in-react.html 
-
+learn graphql to:
 - mutation of ContestType through import.GO
 - lock down graphql calls with JWT
+
+flutter:
+call graphql login through flutter app
+
+apache:
+figure out how to pass through calls like https://smacktalkgaming.com -> http://stgapp:5000/graphql
 
 - save start end dates/time in date format for sending to mongo
 - clean up the other handlers to follow the same format as Record
@@ -18,9 +22,6 @@ https://reactjs.org/docs/thinking-in-react.html
 - fix the glicko2 #s (fails 2/3 way after calucation)
 
 
-
-hints:
-get around the cors issue put https://cors-anywhere.herokuapp.com/http://<GO>
 
 
 done:
