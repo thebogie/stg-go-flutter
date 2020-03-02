@@ -1,0 +1,61 @@
+version: "3.5"
+networks:
+  app-tier:
+    driver: bridge
+
+services:
+  apache:
+    image: "bitnami/apache:latest"
+    #  ports:
+    #    - "80:80"
+    #    - "443:8443"
+    container_name: apache
+    networks:
+      - app-tier
+    volumes:
+      - ./apache/my_vhost.conf:/vhosts/my_vhost.conf:ro
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    environment:
+      - MONGO_DATA_DIR=/data/db
+    volumes:
+      - /home/thebogie/work/stgdata:/data/db
+    ports:
+      - 27017:27017
+    command: mongod
+    depends_on:
+      - apache
+    networks:
+      - app-tier
+
+  app:
+    #command: --security-opt=seccomp:unconfined
+    container_name: stgapp
+    build:
+      context: ./server
+      args:
+        app_env: ${APP_ENV}
+    #volumes:
+    #  - ./server:/go/src/STG/app
+    ports:
+      - 5000:5000
+    depends_on:
+      - mongodb
+      - apache
+    links:
+      - mongodb
+    networks:
+      - app-tier
+  #frontend:
+  #  build:
+  #    context: ./frontend
+  #    args:
+  #      app_env: ${APP_ENV}
+  #  volumes:
+  #    - ./frontend/src:/frontend/src
+  #    - '/frontend/node_modules'
+  #  ports:
+  #    - "3000:3000"
+  #    - "9229:9229"
