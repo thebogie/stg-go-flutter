@@ -1,4 +1,0 @@
-type Mutation {
-    signUp(input: User!): JWT
-    Login(input: Credentials!): JWT
-}

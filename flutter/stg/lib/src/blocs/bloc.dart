@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'validators.dart';
 import 'package:rxdart/rxdart.dart';
+import '../resources/fetch.dart';
 
 class Bloc extends Object with Validators {
   final _emailCtr = new BehaviorSubject<String>();
@@ -22,6 +23,17 @@ class Bloc extends Object with Validators {
 
     print("email: $email");
     print("password: $password");
+
+    const String loginQuery = r'''
+ query {
+  protected {
+    message
+  }
+}
+
+''';
+
+    FetchFromSTGWithGraphql().fetchGraphql(loginQuery);
   }
 
   dispose() {

@@ -1,0 +1,11 @@
+database:
+  address: "mongodb://localhost:27017"
+  database: stg
+  username: none
+  password: none
+  debug: true
+  port: 27017
+api:
+  token: "letmeinSTG"
+wordnik:
+  apikey: fe48869d95274080a130207a25202ab0de9f5a79720597c74

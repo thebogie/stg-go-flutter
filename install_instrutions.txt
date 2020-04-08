@@ -1,0 +1,120 @@
+https://github.com/thebogie/stg-go-flutter
+
+
+linix mint 19
+sudo apt install curl
+install nomachine
+https://www.nomachine.com/download/linux&id=1
+
+install go:
+https://golang.org/doc/install?download=go1.11.1.linux-amd64.tar.gz
+sudo tar -C /usr/local -xzf go1.11.1.linux-amd64.tar.gz
+sudo vi /etc/profile -> export PATH=$PATH:/usr/local/go/bin:/home/thebogie/go/bin
+https://medium.com/@theShiva5/creating-simple-login-api-using-go-and-mongodb-9b3c1c775d2f
+
+install git:
+sudo apt-get install git
+
+visual studio:
+curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
+sudo install -o root -g root -m 644 microsoft.gpg /etc/apt/trusted.gpg.d/
+sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
+sudo apt-get install apt-transport-https
+sudo apt-get update
+sudo apt-get install code # or code-insiders
+- install go extension
+- https://visualstudio.github.com/ for github extension
+- get github
+   - git config --global user.name thebogie
+   - git clone https://github.com/thebogie/gostg-docker-compose
+
+install react
+using: https://github.com/marmelab/react-admin/tree/master/examples/demo
+sudo npm cache clean -f ; sudo chown -R $(whoami) ~/.npm
+#https://marmelab.com/react-admin/Tutorial.html
+sudo npm install -g create-react-app
+create-react-app client
+cd client/
+yarn add react-admin ra-data-json-server prop-types
+yarn start
+
+
+install docker
+- sudo apt install docker.io
+- docker pull mongo
+- sudo docker run  -d --name stgmongo  -p 27017:27017 -v /home/thebogie/gostgdata:/data/db mongo
+- docker exec -it stgmongo /bin/bash
+
+install mongodb client
+nosqlbooster
+to see on docker:  mongo -u root -p letmeinnow --authenticationDatabase admin
+
+
+install chrome
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+sudo dpkg -i google-chrome-stable_current_amd64.deb
+
+
+
+*** CODE NOTES ***
+FORMAT STRING: 2006-01-02T15:04:05.999999-07:00
+
+ clear ; docker image prune -f ; docker-compose up --build
+
+
+wordnik api: 
+noun = http://api.wordnik.com/v4/words.json/randomWord?api_key=fe48869d95274080a130207a25202ab0de9f5a79720597c74&includePartOfSpeech=noun
+adj = http://api.wordnik.com/v4/words.json/randomWord?api_key=fe48869d95274080a130207a25202ab0de9f5a79720597c74&includePartOfSpeech=adjective
+
+
+*** CURRENT ***
+- get user's ratings for entire time
+
+**** TODO ****
+make sure place/result is sorted in contest (createcontest logic)
+
+unit test for Ratings (multiple contests)
+- check # of contests under Ratings
+- check player A is in X contests
+
+front landing page
+
+stats page has
+- high level stats: 
+  - current glicko2 rating with deviation 
+  - record of wins/losses/draws (clickable to list out all the wins (contest table))
+  - Nemisis (person who beat me the most)
+  - Domanting (person who you beat the most)
+  - clickable to chart over time of glicko2 ratings
+
+- table of games won/lost (sortable with games won set) (lnk to games in BGG?)
+
+
+**Defect**
+-when creating a new user, add default values to lastrating
+-fix daylight savings times! hammered all to -5 but some should be -6 depending on summertime
+-milliseconds are screwed up on 4 of the _data_org.json items (need ":00")
+-user signin needs to check for uniquiness before letting new user in
+-  deviaation by day? or month?
+- somewhere during the glicko2, acontest is throwing off mitch's #s
+
+*** DONE ***
+pass bson.objectid around? or just a string -> use string
+
+
+**** PRINT OUT OBJECT ****
+	s := reflect.ValueOf(d).Elem()
+	typeOfT := s.Type()
+
+	for i := 0; i < s.NumField(); i++ {
+		f := s.Field(i)
+		println("%d: %s %s = %v\n", i,
+			typeOfT.Field(i).Name, f.Type(), f.Interface())
+	}
+
+
+//https://github.com/jz222/go-graphql-api-template
+//https://github.com/machinebox/graphql
+
+//https://github.com/99designs/gqlgen
+//go run github.com/99designs/gqlgen generate
