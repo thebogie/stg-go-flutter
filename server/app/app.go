@@ -14,6 +14,7 @@ var (
 	router = gin.Default()
 )
 
+// Run is run
 func Run() {
 
 	/*
@@ -62,5 +63,5 @@ func Run() {
 	api.POST("/contest", contestCtl.UpdateContest)
 	api.POST("/game", gameCtl.UpdateGame)
 
-	router.Run(":9090")
+	router.Run(":5000")
 }

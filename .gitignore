@@ -6,3 +6,5 @@ server/server
 server/stg-go-flutter
 server/__debug_bin
 server/.netrc
+server/log/contests.json
+server/log/general-log.log

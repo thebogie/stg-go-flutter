@@ -2,11 +2,16 @@ package services
 
 import (
 	"encoding/json"
+
+	"log"
+	"math/rand"
 	"net/http"
 
-	"github.com/thebogie/stg-go-flutter/config"
+	//"os"
+	//"path/filepath"
+	"time"
 
-	"github.com/labstack/gommon/log"
+	"github.com/thebogie/stg-go-flutter/config"
 )
 
 // FetchWordnikWord returns one word
@@ -26,13 +31,33 @@ func FetchWordnikWord(typeofword string) string {
 
 	defer resp.Body.Close()
 
-	err = json.NewDecoder(resp.Body).Decode(&dat)
+	if resp.StatusCode == http.StatusOK {
 
-	if err != nil {
-		//http.Error(w, err.Error(), http.StatusBadRequest)
-		log.Fatal("❌", err)
+		err = json.NewDecoder(resp.Body).Decode(&dat)
+
+		if err != nil {
+			//http.Error(w, err.Error(), http.StatusBadRequest)
+			log.Fatal("❌", err)
+		}
+		return string(dat["word"].(string))
+
+	} else {
+
+		//worknik timeout
+		config.GeneralLogger.Println("Worknik timeout. Pay for it.")
+
+		const charset = "abcdefghijklmnopqrstuvwxyz" +
+			"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+
+		var seededRand *rand.Rand = rand.New(
+			rand.NewSource(time.Now().UnixNano()))
+
+		b := make([]byte, 20)
+		for i := range b {
+			b[i] = charset[seededRand.Intn(len(charset))]
+		}
+
+		return "FIXCONTESTNAME" + string(b)
+
 	}
-
-	return string(dat["word"].(string))
-
 }

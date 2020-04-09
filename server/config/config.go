@@ -2,6 +2,9 @@ package config
 
 import (
 	"fmt"
+	"log"
+	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/spf13/viper"
@@ -26,7 +29,16 @@ type Schema struct {
 }
 
 var (
+	// Config is
 	Config *Schema
+	// GeneralLogger exported
+	GeneralLogger *log.Logger
+
+	// ErrorLogger exported
+	ErrorLogger *log.Logger
+
+	// ContestLogger exported
+	ContestLogger *log.Logger
 )
 
 func init() {
@@ -47,4 +59,27 @@ func init() {
 	if err != nil {
 		panic(fmt.Errorf("Fatal error config file: %s ", err))
 	}
+
+	absPath, err := filepath.Abs("log")
+	if err != nil {
+		fmt.Println("Error reading given path:", err)
+	}
+
+	generalLog, err := os.OpenFile(absPath+"/general-log.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		fmt.Println("Error opening file:", err)
+		os.Exit(1)
+	}
+
+	contestLog, err := os.OpenFile(absPath+"/contests.json", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		fmt.Println("Error opening file:", err)
+		os.Exit(1)
+	}
+
+	GeneralLogger = log.New(generalLog, "General Logger:\t", log.Ldate|log.Ltime|log.Lshortfile)
+	ErrorLogger = log.New(generalLog, "Error Logger:\t", log.Ldate|log.Ltime|log.Lshortfile)
+
+	ContestLogger = log.New(contestLog, "", 0)
+
 }

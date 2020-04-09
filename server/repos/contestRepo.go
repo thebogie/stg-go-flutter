@@ -3,9 +3,13 @@ package repos
 import (
 	"context"
 	//"errors"
+
+	"encoding/json"
 	"log"
 
+	"github.com/thebogie/stg-go-flutter/config"
 	"github.com/thebogie/stg-go-flutter/types"
+
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -44,6 +48,14 @@ func (c *contestRepo) AddContest(in *types.Contest) {
 			return
 		}
 		log.Printf("AddContest: %+v\n", in)
+
+		data, err := json.Marshal(in)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		config.ContestLogger.Printf("%s\n", data)
+
 	}
 
 	return
