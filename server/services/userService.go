@@ -3,15 +3,16 @@ package services
 import (
 	//"errors"
 
+	"github.com/thebogie/stg-go-flutter/config"
 	"github.com/thebogie/stg-go-flutter/repos"
 	"github.com/thebogie/stg-go-flutter/types"
 )
 
 // UserService interface
 type UserService interface {
-	GetByID(*types.User) (*types.User, error)
-	GetByName(*types.User) (*types.User, error)
-	AddUser(*types.User) (*types.User, error)
+	GetUserByID(*types.User) (*types.User, error)
+	GetUserByUsername(*types.User) bool
+	AddUser(*types.User)
 }
 
 type userService struct {
@@ -27,7 +28,18 @@ func NewUserService(
 	}
 }
 
-func (us *userService) AddUser(in *types.User) (*types.User, error) {
+func (us *userService) AddUser(in *types.User) {
+
+	if !us.GetUserByUsername(in) {
+		us.Repo.AddUser(in)
+	} else {
+		config.Apex.Infof("User already exists: %+v", in)
+	}
+
+	return
+}
+
+func (us *userService) GetUserByID(in *types.User) (*types.User, error) {
 	//if id == 0 {
 	//	return nil, errors.New("id param is required")
 	//}
@@ -37,18 +49,7 @@ func (us *userService) AddUser(in *types.User) (*types.User, error) {
 	return in, nil
 }
 
-func (us *userService) GetByID(in *types.User) (*types.User, error) {
-	//if id == 0 {
-	//	return nil, errors.New("id param is required")
-	//}
+func (us *userService) GetUserByUsername(in *types.User) bool {
 
-	us.Repo.AddUser(in)
-
-	return in, nil
-}
-
-func (us *userService) GetByName(in *types.User) (*types.User, error) {
-	us.Repo.AddUser(in)
-
-	return in, nil
+	return us.Repo.FindUserByUsername(in)
 }

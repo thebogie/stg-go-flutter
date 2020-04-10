@@ -37,22 +37,22 @@ func main() {
 
 		//contests
 		for _, contest := range a.([]interface{}) {
-			log.Printf("Contest: %+v\n", contest)
+			config.Apex.Infof("Contest: %+v\n", contest)
 			requestBody, err := json.Marshal(contest)
 			if err != nil {
-				log.Fatalln(err)
+				config.Apex.Fatal(err)
 			}
 
 			resp, err := http.Post("http://localhost:9090/api/contest", "application/json", bytes.NewBuffer((requestBody)))
 			if err != nil {
-				log.Fatalln(err)
+				config.Apex.Fatal(err)
 			}
 
 			defer resp.Body.Close()
 
 			body, err := ioutil.ReadAll(resp.Body)
 			if err != nil {
-				log.Fatalln(err)
+				config.Apex.Fatal(err)
 			}
 
 			log.Println(string(body))

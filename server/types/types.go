@@ -7,6 +7,14 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
+// PasswordConfig is this
+type PasswordConfig struct {
+	Time    uint32
+	Memory  uint32
+	Threads uint8
+	KeyLen  uint32
+}
+
 // User : player
 type User struct {
 	Userid    primitive.ObjectID `json:"_id" bson:"_id"`

@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/thebogie/stg-go-flutter/config"
 	"github.com/thebogie/stg-go-flutter/controllers"
 	"github.com/thebogie/stg-go-flutter/db"
 	"github.com/thebogie/stg-go-flutter/repos"
@@ -60,8 +61,9 @@ func Run() {
 
 	//update or create
 	api.POST("/register", userCtl.Register)
+	api.POST("/login", userCtl.Login)
 	api.POST("/contest", contestCtl.UpdateContest)
 	api.POST("/game", gameCtl.UpdateGame)
 
-	router.Run(":5000")
+	router.Run(config.Config.API.Port)
 }

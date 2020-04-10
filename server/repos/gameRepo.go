@@ -2,8 +2,8 @@ package repos
 
 import (
 	"context"
-	"log"
 
+	"github.com/thebogie/stg-go-flutter/config"
 	"github.com/thebogie/stg-go-flutter/types"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -36,11 +36,11 @@ func (g *gameRepo) FindGameByName(filter *types.Game) {
 
 	err := collection.FindOne(context.TODO(), bson.M{"name": filter.Name}).Decode(&filter)
 	if err != nil {
-		log.Println(err)
+		config.Apex.Errorf("finding game by name %v", err)
 		return
 	}
 
-	log.Printf("Found a single document: %+v\n", filter)
+	config.Apex.Infof("Found a single document: %+v", filter)
 	return
 }
 
@@ -51,16 +51,16 @@ func (g *gameRepo) AddGame(in *types.Game) {
 
 	collection := g.dbconn.Collection(g.dbCollection)
 	g.FindGameByName(in)
-	log.Printf("Does it exist: %+v\n", in)
+	config.Apex.Infof("Does it exist: %+v", in)
 	if in.Gameid == primitive.NilObjectID {
 		in.Gameid = primitive.NewObjectID()
 		_, err := collection.InsertOne(context.TODO(), in)
 
 		if err != nil {
-			log.Println("Failed to insert new game with error:", err)
+			config.Apex.Errorf("Failed to insert new game with error: %v", err)
 			return
 		}
-		log.Printf("AddGame: %+v\n", in)
+		config.Apex.Infof("AddGame: %+v", in)
 	}
 	return
 }

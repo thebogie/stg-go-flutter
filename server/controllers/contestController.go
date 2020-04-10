@@ -3,12 +3,13 @@ package controllers
 import (
 	"encoding/json"
 	"io/ioutil"
-	"log"
+
 	"net/http"
 	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/thebogie/stg-go-flutter/config"
 	"github.com/thebogie/stg-go-flutter/services"
 	"github.com/thebogie/stg-go-flutter/types"
 	//"go.mongodb.org/mongo-driver/bson/primitive"
@@ -90,7 +91,7 @@ func (ctl *contestController) UpdateContest(c *gin.Context) {
 
 	for key, value := range rawStrings {
 
-		log.Printf("%q is a string: %q\n", key, value)
+		config.Apex.Infof("%q is a string: %q", key, value)
 
 		if key == "stopoffset" {
 			contest.Stopoffset = value.(string)
@@ -125,11 +126,11 @@ func (ctl *contestController) UpdateContest(c *gin.Context) {
 					}
 					if c == "playerid" {
 						var player types.User
-						var found *types.User
-						//TODO: finduser by name?
+						//var found *types.User
+						//TODO: user doesnt exist... create user? throw failure to put in correct user
 						player.Username = d.(string)
-						found, _ = ctl.us.GetByName(&player)
-						stats.Playerid = found.Userid
+						ctl.us.GetUserByUsername(&player)
+						stats.Playerid = player.Userid
 					}
 				}
 				contest.Outcome = append(contest.Outcome, stats)
@@ -154,7 +155,7 @@ func (ctl *contestController) UpdateContest(c *gin.Context) {
 
 			addvenue, err := ctl.vs.AddVenue(&venue)
 			if err != nil {
-				log.Fatal(err)
+				config.Apex.Fatalf("add venue issue %v", err)
 			}
 
 			contest.Venue = addvenue.Venueid
@@ -169,7 +170,7 @@ func (ctl *contestController) UpdateContest(c *gin.Context) {
 
 				addgame, err := ctl.gs.AddGame(&game)
 				if err != nil {
-					log.Fatal(err)
+					config.Apex.Fatalf("addgame issue %v", err)
 				}
 
 				contest.Games = append(contest.Games, addgame.Gameid)
@@ -177,11 +178,6 @@ func (ctl *contestController) UpdateContest(c *gin.Context) {
 		}
 
 	}
-
-	//do i need to put the time with the offset?
-
-	log.Printf("JSON?%+v\n", rawStrings)
-	log.Printf("JSON?%+v\n", contest)
 
 	ctl.cs.UpdateContest(&contest)
 

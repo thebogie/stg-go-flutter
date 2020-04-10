@@ -3,7 +3,8 @@ package repos
 import (
 	"context"
 	//"errors"
-	"log"
+
+	"github.com/thebogie/stg-go-flutter/config"
 
 	"github.com/thebogie/stg-go-flutter/types"
 	"go.mongodb.org/mongo-driver/bson"
@@ -14,6 +15,7 @@ import (
 // UserRepo interface
 type UserRepo interface {
 	AddUser(*types.User)
+	FindUserByUsername(*types.User) bool
 }
 
 type userRepo struct {
@@ -30,18 +32,24 @@ func NewUserRepo(dbconn *mongo.Database, dbCollection string) UserRepo {
 }
 
 // CreateNewUser is func adapter save record under database
-func (u *userRepo) FindUserByUsername(filter *types.User) {
+func (u *userRepo) FindUserByUsername(filter *types.User) bool {
 
 	collection := u.dbconn.Collection(u.dbCollection)
 
 	err := collection.FindOne(context.TODO(), bson.M{"username": filter.Username}).Decode(&filter)
 	if err != nil {
-		log.Println(err)
-		return
+		config.Apex.Infof("%s", err)
+		return false
 	}
 
-	log.Printf("Found a single document: %+v\n", filter)
-	return
+	if filter.Userid == primitive.NilObjectID {
+
+		return false
+	}
+
+	config.Apex.Infof("%v", filter)
+
+	return true
 }
 
 // CreateNewUser is func adapter save record under database
@@ -51,16 +59,16 @@ func (u *userRepo) AddUser(in *types.User) {
 
 	collection := u.dbconn.Collection(u.dbCollection)
 	u.FindUserByUsername(in)
-	log.Printf("Does it exist: %+v\n", in)
+	config.Apex.Infof("Does it exist: %+v", in)
 	if in.Userid == primitive.NilObjectID {
 		in.Userid = primitive.NewObjectID()
 		_, err := collection.InsertOne(context.TODO(), in)
 
 		if err != nil {
-			log.Println("Failed to insert new game with error:", err)
+			config.Apex.Errorf("Failed to insert new game with error: %v", err)
 			return
 		}
-		log.Printf("AddUser: %+v\n", in)
+		config.Apex.Infof("AddUser: %+v", in)
 	}
 	return
 }

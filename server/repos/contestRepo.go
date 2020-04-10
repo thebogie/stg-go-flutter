@@ -5,7 +5,6 @@ import (
 	//"errors"
 
 	"encoding/json"
-	"log"
 
 	"github.com/thebogie/stg-go-flutter/config"
 	"github.com/thebogie/stg-go-flutter/types"
@@ -44,17 +43,17 @@ func (c *contestRepo) AddContest(in *types.Contest) {
 		_, err := collection.InsertOne(context.TODO(), in)
 
 		if err != nil {
-			log.Println("Failed to insert new contest with error:", err)
+			config.Apex.Errorf("Failed to insert new contest with error: %v", err)
 			return
 		}
-		log.Printf("AddContest: %+v\n", in)
+		config.Apex.Infof("AddContest: %+v", in)
 
 		data, err := json.Marshal(in)
 		if err != nil {
-			log.Fatal(err)
+			config.Apex.Fatalf("Unable to marshal contest %v", err)
 		}
 
-		config.ContestLogger.Printf("%s\n", data)
+		config.ContestLogger.Printf("%s", data)
 
 	}
 

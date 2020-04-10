@@ -26,7 +26,7 @@ func CreateProduct(c echo.Context) error {
 	/*
 		var objRequest types.Product
 		if err := c.Bind(&objRequest); err != nil {
-			log.Error(err)
+			config.Apex.Error(err)
 			return c.JSON(http.StatusBadRequest, types.ParseStatus("REQ_ERR", "Có lỗi xảy ra, vui lòng kiểm tra lại thông tin"))
 		}
 		if err := c.Validate(&objRequest); err != nil {
@@ -67,7 +67,7 @@ func UpdateProduct(c echo.Context) error {
 		}
 		var objRequest types.ProductUpdate
 		if err := c.Bind(&objRequest); err != nil {
-			log.Error(err)
+			config.Apex.Error(err)
 			return c.JSON(http.StatusBadRequest, types.ParseStatus("REQ_ERR", "Có lỗi xảy ra, vui lòng kiểm tra lại thông tin"))
 		}
 		if err := c.Validate(&objRequest); err != nil {
@@ -107,7 +107,7 @@ func CreateUser(c echo.Context) error {
 	/*
 		var objRequest types.User
 		if err := c.Bind(&objRequest); err != nil {
-			log.Error(err)
+			config.Apex.Error(err)
 			return c.JSON(http.StatusBadRequest, types.ParseStatus("REQ_ERR", "An error occurred, please check the information"))
 		}
 		if err := c.Validate(&objRequest); err != nil {

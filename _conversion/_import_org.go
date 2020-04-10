@@ -27,14 +27,14 @@ func connectToDB() (db *mongo.Client) {
 	db, err := mongo.Connect(context.TODO(), clientOptions)
 
 	if err != nil {
-		log.Fatal(err)
+		config.Apex.Fatal(err)
 	}
 
 	// Check the connection
 	err = db.Ping(context.TODO(), nil)
 
 	if err != nil {
-		log.Fatal(err)
+		config.Apex.Fatal(err)
 	}
 
 	fmt.Println("Connected to MongoDB!")
@@ -170,7 +170,7 @@ func getRandomContestName() (contestname string) {
 
 	adj, err := http.Get("http://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&includePartOfSpeech=adjective&api_key=fe48869d95274080a130207a25202ab0de9f5a79720597c74")
 	if err != nil {
-		log.Fatalln(err)
+		config.Apex.Fatal(err)
 	}
 
 	defer adj.Body.Close()
@@ -180,7 +180,7 @@ func getRandomContestName() (contestname string) {
 
 	noun, err := http.Get("http://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&includePartOfSpeech=noun&api_key=fe48869d95274080a130207a25202ab0de9f5a79720597c74")
 	if err != nil {
-		log.Fatalln(err)
+		config.Apex.Fatal(err)
 	}
 
 	defer noun.Body.Close()

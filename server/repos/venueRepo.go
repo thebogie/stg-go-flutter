@@ -2,8 +2,8 @@ package repos
 
 import (
 	"context"
-	"log"
 
+	"github.com/thebogie/stg-go-flutter/config"
 	"github.com/thebogie/stg-go-flutter/types"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -36,11 +36,11 @@ func (v *venueRepo) FindVenue(filter *types.Venue) {
 
 	err := collection.FindOne(context.TODO(), bson.M{"address": filter.Address}).Decode(&filter)
 	if err != nil {
-		log.Println(err)
+		config.Apex.Errorf("find venue issue %v", err)
 		return
 	}
 
-	log.Printf("Found a single document: %+v\n", filter)
+	config.Apex.Infof("Found a single document: %+v", filter)
 	return
 }
 
@@ -51,16 +51,16 @@ func (v *venueRepo) AddVenue(in *types.Venue) {
 
 	collection := v.dbconn.Collection(v.dbCollection)
 	v.FindVenue(in)
-	log.Printf("Does it exist: %+v\n", in)
+	config.Apex.Infof("Does it exist: %+v", in)
 	if in.Venueid == primitive.NilObjectID {
 		in.Venueid = primitive.NewObjectID()
 		_, err := collection.InsertOne(context.TODO(), in)
 
 		if err != nil {
-			log.Println("Failed to insert new Venue with error:", err)
+			config.Apex.Errorf("Failed to insert new Venue with error:", err)
 			return
 		}
-		log.Printf("AddVenue: %+v\n", in)
+		config.Apex.Infof("AddVenue: %+v", in)
 	}
 	return
 }

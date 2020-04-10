@@ -23,13 +23,13 @@ func InitDB() *mongo.Database {
 	)
 
 	if err != nil {
-		log.Fatal(err)
+		config.Apex.Fatalf("cant connect to Mongo %v", err)
 	}
 
 	failedConnection := client.Ping(ctx, readpref.Primary())
 
 	if failedConnection != nil {
-		log.Fatal("❌", err)
+		config.Apex.Fatalf("❌", err)
 	}
 
 	log.Print("✅ Connection to MongoDB established")

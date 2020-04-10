@@ -7,5 +7,11 @@ database:
   port: 27017
 api:
   token: "letmeinSTG"
+  port: ":5000"
 wordnik:
   apikey: fe48869d95274080a130207a25202ab0de9f5a79720597c74
+password:
+  time: 1
+  memory: 65536
+  threads: 4
+  keylen: 32
