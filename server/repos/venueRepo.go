@@ -36,7 +36,7 @@ func (v *venueRepo) FindVenue(filter *types.Venue) {
 
 	err := collection.FindOne(context.TODO(), bson.M{"address": filter.Address}).Decode(&filter)
 	if err != nil {
-		config.Apex.Errorf("find venue issue %v", err)
+		config.Apex.Warnf("find venue issue %v", err)
 		return
 	}
 
@@ -51,7 +51,7 @@ func (v *venueRepo) AddVenue(in *types.Venue) {
 
 	collection := v.dbconn.Collection(v.dbCollection)
 	v.FindVenue(in)
-	config.Apex.Infof("Does it exist: %+v", in)
+	config.Apex.Debugf("Does it exist: %+v", in)
 	if in.Venueid == primitive.NilObjectID {
 		in.Venueid = primitive.NewObjectID()
 		_, err := collection.InsertOne(context.TODO(), in)

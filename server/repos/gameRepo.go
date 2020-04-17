@@ -51,7 +51,7 @@ func (g *gameRepo) AddGame(in *types.Game) {
 
 	collection := g.dbconn.Collection(g.dbCollection)
 	g.FindGameByName(in)
-	config.Apex.Infof("Does it exist: %+v", in)
+	config.Apex.Debugf("Does it exist: %+v", in)
 	if in.Gameid == primitive.NilObjectID {
 		in.Gameid = primitive.NewObjectID()
 		_, err := collection.InsertOne(context.TODO(), in)

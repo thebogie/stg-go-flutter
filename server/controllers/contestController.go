@@ -91,8 +91,6 @@ func (ctl *contestController) UpdateContest(c *gin.Context) {
 
 	for key, value := range rawStrings {
 
-		config.Apex.Infof("%q is a string: %q", key, value)
-
 		if key == "stopoffset" {
 			contest.Stopoffset = value.(string)
 		}
@@ -128,8 +126,8 @@ func (ctl *contestController) UpdateContest(c *gin.Context) {
 						var player types.User
 						//var found *types.User
 						//TODO: user doesnt exist... create user? throw failure to put in correct user
-						player.Username = d.(string)
-						ctl.us.GetUserByUsername(&player)
+						player.Email = d.(string)
+						ctl.us.GetUserByEmail(&player)
 						stats.Playerid = player.Userid
 					}
 				}

@@ -57,10 +57,10 @@ func (ctl *userController) Register(c *gin.Context) {
 
 	for key, value := range rawStrings {
 
-		config.Apex.Infof("%q is a string: %q", key, value)
+		config.Apex.Debugf("%q is a string: %q", key, value)
 
-		if key == "username" {
-			player.Username = value.(string)
+		if key == "email" {
+			player.Email = value.(string)
 		}
 		if key == "password" {
 			hashed, err := services.GeneratePassword(&ctl.pwdhash, value.(string))
@@ -73,7 +73,6 @@ func (ctl *userController) Register(c *gin.Context) {
 
 	}
 	ctl.us.AddUser(&player)
-	config.Apex.Warnf("HASHGENERATED:%+v", player.Password)
 
 }
 
@@ -93,8 +92,8 @@ func (ctl *userController) Login(c *gin.Context) {
 
 		//config.Apex.Infof("%q is a string: %q", key, value)
 
-		if key == "username" {
-			player.Username = value.(string)
+		if key == "email" {
+			player.Email = value.(string)
 		}
 		if key == "password" {
 			attemptedpassword = value.(string)
@@ -103,7 +102,7 @@ func (ctl *userController) Login(c *gin.Context) {
 
 	}
 
-	ctl.us.GetUserByUsername(&player)
+	ctl.us.GetUserByEmail(&player)
 
 	match, err := services.ComparePassword(attemptedpassword, player.Password)
 	if err != nil {
@@ -113,6 +112,8 @@ func (ctl *userController) Login(c *gin.Context) {
 	}
 	if match == false {
 		config.Apex.Warn("WRONG PASSWORD SEND BACK TO LOGIN OR REGIESTER")
+		c.JSON(http.StatusUnauthorized, gin.H{"status": "unauthorized"})
+		return
 	}
 
 	config.Apex.Infof("Logged in player:%+v", player)

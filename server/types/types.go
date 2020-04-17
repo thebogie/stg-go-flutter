@@ -19,7 +19,6 @@ type PasswordConfig struct {
 type User struct {
 	Userid    primitive.ObjectID `json:"_id" bson:"_id"`
 	Email     string             `json:"email" bson:"email"`
-	Username  string             `json:"username" bson:"username"`
 	FirstName string             `json:"firstName" bson:"firstName"`
 	LastName  string             `json:"lastName" bson:"lastName"`
 	Password  string             `json:"password" bson:"password"`

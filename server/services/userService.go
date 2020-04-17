@@ -11,7 +11,7 @@ import (
 // UserService interface
 type UserService interface {
 	GetUserByID(*types.User) (*types.User, error)
-	GetUserByUsername(*types.User) bool
+	GetUserByEmail(*types.User) bool
 	AddUser(*types.User)
 }
 
@@ -30,7 +30,7 @@ func NewUserService(
 
 func (us *userService) AddUser(in *types.User) {
 
-	if !us.GetUserByUsername(in) {
+	if !us.GetUserByEmail(in) {
 		us.Repo.AddUser(in)
 	} else {
 		config.Apex.Infof("User already exists: %+v", in)
@@ -49,7 +49,7 @@ func (us *userService) GetUserByID(in *types.User) (*types.User, error) {
 	return in, nil
 }
 
-func (us *userService) GetUserByUsername(in *types.User) bool {
+func (us *userService) GetUserByEmail(in *types.User) bool {
 
-	return us.Repo.FindUserByUsername(in)
+	return us.Repo.FindUserByEmail(in)
 }

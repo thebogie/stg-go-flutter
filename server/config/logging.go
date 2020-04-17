@@ -35,7 +35,10 @@ func init() {
 	}
 
 	// backup logs
+
 	ContestLogger = log.New(contestLog, "", 0)
+
+	apex.SetLevel(apex.DebugLevel)
 
 	//General logs
 	apex.SetHandler(multi.New(

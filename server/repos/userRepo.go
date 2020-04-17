@@ -15,7 +15,7 @@ import (
 // UserRepo interface
 type UserRepo interface {
 	AddUser(*types.User)
-	FindUserByUsername(*types.User) bool
+	FindUserByEmail(*types.User) bool
 }
 
 type userRepo struct {
@@ -32,13 +32,13 @@ func NewUserRepo(dbconn *mongo.Database, dbCollection string) UserRepo {
 }
 
 // CreateNewUser is func adapter save record under database
-func (u *userRepo) FindUserByUsername(filter *types.User) bool {
+func (u *userRepo) FindUserByEmail(filter *types.User) bool {
 
 	collection := u.dbconn.Collection(u.dbCollection)
 
-	err := collection.FindOne(context.TODO(), bson.M{"username": filter.Username}).Decode(&filter)
+	err := collection.FindOne(context.TODO(), bson.M{"email": filter.Email}).Decode(&filter)
 	if err != nil {
-		config.Apex.Infof("%s", err)
+		config.Apex.Errorf("%s", err)
 		return false
 	}
 
@@ -46,8 +46,6 @@ func (u *userRepo) FindUserByUsername(filter *types.User) bool {
 
 		return false
 	}
-
-	config.Apex.Infof("%v", filter)
 
 	return true
 }
@@ -58,8 +56,8 @@ func (u *userRepo) AddUser(in *types.User) {
 	//var createdDocument session.MongoDbDocument
 
 	collection := u.dbconn.Collection(u.dbCollection)
-	u.FindUserByUsername(in)
-	config.Apex.Infof("Does it exist: %+v", in)
+	u.FindUserByEmail(in)
+	config.Apex.Debugf("Does it exist: %+v", in)
 	if in.Userid == primitive.NilObjectID {
 		in.Userid = primitive.NewObjectID()
 		_, err := collection.InsertOne(context.TODO(), in)
