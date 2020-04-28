@@ -1,6 +1,6 @@
 https://github.com/thebogie/stg-go-flutter
 
-flutter: https://github.com/o1298098/Flutter-Movie
+flutter: https://github.com/KingWu/flutter_starter_kit
 
 
 linix mint 19

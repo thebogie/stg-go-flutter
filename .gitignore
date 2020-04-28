@@ -1,6 +1,5 @@
 flutter/stg/pubspec.lock
 .vscode/launch.json
-STGVSCODE.code-workspace
 _conversion/stg_records.json
 server/server
 server/stg-go-flutter

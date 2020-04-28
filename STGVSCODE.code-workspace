@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			// Source code
+			"name": "STG",
+			"path": "."
+		  },
+		{
+			// flutter code
+			"name": "stg_flutter",
+			"path": "stg_flutter"
+		  },
+		  {
+			// Docs and release notes
+			"name": "server",
+			"path": "server"
+		  },
+	]
+}
