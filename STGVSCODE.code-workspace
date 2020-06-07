@@ -7,8 +7,8 @@
 		  },
 		{
 			// flutter code
-			"name": "stg_flutter",
-			"path": "stg_flutter"
+			"name": "stg_svelte",
+			"path": "stg_svelte"
 		  },
 		  {
 			// Docs and release notes
